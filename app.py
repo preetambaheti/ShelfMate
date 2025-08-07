@@ -105,7 +105,6 @@ def dashboard():
             'status': status
         })
 
-    # Apply filter
     if filter_status == 'Expiring':
         groceries = [g for g in groceries if g['status'] == 'Expiring Soon']
     elif filter_status == 'Soon':
