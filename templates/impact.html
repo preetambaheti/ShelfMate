@@ -1,0 +1,67 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8">
+  <title>Impact Report</title>
+  <link rel="stylesheet" href="{{ url_for('static', filename='css/style.css') }}">
+</head>
+<body>
+
+<!-- Navbar -->
+<nav class="navbar">
+  <div class="navbar-logo">
+    <a href="/" style="text-decoration: none; color: inherit;">🛒 Smart Food Tracker</a>
+  </div>
+  <ul class="navbar-menu">
+    <li><a href="/grocery">Grocery Entry</a></li>
+    <li><a href="/dashboard">Food Tracker</a></li>
+    <li><a href="/donate">Donation</a></li>
+    <li><a class="active" href="/impact">Impact Report</a></li>
+    <li><a href="/recipes">Recipe Ideas</a></li>
+  </ul>
+</nav>
+
+<!-- Impact Report Content -->
+    <div class="impact-wrapper">
+        <div class="impact-container">
+        <h2>Your Impact Report</h2>
+        <p>See how you're reducing food waste and making a difference.</p>
+
+        <div class="impact-cards">
+            <div class="impact-card green">
+            <div class="icon">✅</div>
+            <h4>Items Saved</h4>
+            <h1>{{ items_saved }}</h1>
+            <p>Used or donated before expiry</p>
+            </div>
+            <div class="impact-card blue">
+            <div class="icon">🤍</div>
+            <h4>Items Donated</h4>
+            <h1>{{ items_donated }}</h1>
+            <p>{{ (items_donated / (items_saved + 0.0001) * 100)|round(0) }}% of all items donated</p>
+            </div>
+            <div class="impact-card purple">
+            <div class="icon">🛠️</div>
+            <h4>Usage Rate</h4>
+            <h1>{{ usage_rate }}%</h1>
+            <p>Of items used before expiry</p>
+            </div>
+        </div>
+
+        <div class="motivation-card">
+            <div class="motivation-icon">📈</div>
+            <h3>Keep Up the Good Work!</h3>
+            <p>You're making a significant difference by reducing food waste.
+            Every item saved contributes to a more sustainable future.</p>
+            <div class="hearts">💚 💚 💚 💚 💚</div>
+        </div>
+        </div>
+    </div>
+
+<!-- Footer -->
+<footer class="footer">
+  <p>Smart Food Tracker © 2025 • Reduce Waste • Save Money • Help Others</p>
+</footer>
+
+</body>
+</html>

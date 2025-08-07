@@ -1,0 +1,76 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8">
+  <title>Food Tracker</title>
+  <link rel="stylesheet" href="{{ url_for('static', filename='css/style.css') }}">
+</head>
+<body>
+  <!-- Navbar -->
+  <nav class="navbar">
+    <div class="navbar-logo">
+      <a href="/" style="text-decoration: none; color: inherit;">🛒 Smart Food Tracker</a>
+    </div>
+    <ul class="navbar-menu">
+      <li><a href="/grocery">Grocery Entry</a></li>
+      <li><a class="active" href="/dashboard">Food Tracker</a></li>
+      <li><a href="/donate">Donation</a></li>
+      <li><a href="/impact">Impact Report</a></li>
+      <li><a href="/recipes">Recipe Ideas</a></li>
+    </ul>
+  </nav>
+
+  <!-- Food Tracker Page -->
+  <div class="dashboard-page">
+    <h2>Food Tracker</h2>
+    <p>Monitor your food items and their expiry dates.</p>
+
+    <!-- Filter Buttons -->
+    <div class="filter-tabs">
+      <a href="/dashboard?filter=All" class="{{ 'active' if active=='All' else '' }}">All Items</a>
+      <a href="/dashboard?filter=Expiring" class="{{ 'active' if active=='Expiring' else '' }}">Expiring Soon</a>
+      <a href="/dashboard?filter=Soon" class="{{ 'active' if active=='Soon' else '' }}">Use Soon</a>
+      <a href="/dashboard?filter=Fresh" class="{{ 'active' if active=='Fresh' else '' }}">Fresh</a>
+    </div>
+
+    <!-- Grocery Cards -->
+    <div class="tracker-box">    
+        <div class="card-container">
+        {% for g in groceries %}
+        <div class="card {{ g.status|lower|replace(' ', '-') }}">
+            <div class="card-header">
+            <h3>{{ g.name }}</h3>
+            <span class="badge">{{ g.status }}</span>
+            </div>
+
+            <p>{{ g.quantity }} {{ g.unit }} • {{ g.category }}</p>
+
+            <p><strong>
+            {% if g.days_left < 0 %}
+                Expired {{ -g.days_left }} days ago
+            {% elif g.days_left == 0 %}
+                Expiring Today
+            {% else %}
+                {{ g.days_left }} days left
+            {% endif %}
+            </strong></p>
+
+            <p>Purchased: {{ g.mfg }}<br>Expires: {{ g.expiry }}</p>
+
+            <!-- Action Buttons -->
+            <div class="card-buttons">
+            <a href="/mark_used/{{ g.id }}" class="btn-secondary">🛠 Mark as Used</a>
+            <a href="/remove/{{ g.id }}" class="btn-danger">🗑 Remove</a>
+            </div>
+        </div>
+        {% endfor %}
+        </div>
+    </div>
+  </div>
+
+  <!-- Footer -->
+  <footer class="footer">
+    <p>Smart Food Tracker © 2025 • Reduce Waste • Save Money • Help Others</p>
+  </footer>
+</body>
+</html>

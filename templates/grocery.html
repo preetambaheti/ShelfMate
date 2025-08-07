@@ -1,0 +1,315 @@
+<!DOCTYPE html>
+<html lang="en">
+<script>
+  function toggleCustomAndGrocery() {
+    const customInput = document.getElementById('custom_item');
+    const radios = document.querySelectorAll('input[name="selected_item"]');
+
+    customInput.disabled = Array.from(radios).some(r => r.checked);
+    radios.forEach(radio => {
+      radio.disabled = customInput.value.trim().length > 0;
+    });
+  }
+
+  document.addEventListener('DOMContentLoaded', () => {
+    document.getElementById('custom_item').addEventListener('input', toggleCustomAndGrocery);
+    document.querySelectorAll('input[name="selected_item"]').forEach(r => {
+      r.addEventListener('change', toggleCustomAndGrocery);
+    });
+  });
+</script>
+
+<head>
+  <meta charset="UTF-8">
+  <title>Grocery Entry</title>
+  <link rel="stylesheet" href="{{ url_for('static', filename='css/style.css') }}">
+  <script>
+
+    let lastSelectedRadio = null;
+
+    function toggleRadio(el) {
+        if (lastSelectedRadio === el) {
+        el.checked = false;
+        lastSelectedRadio = null;
+        } else {
+        lastSelectedRadio = el;
+        }
+        toggleCustomAndGrocery();
+    }
+
+    function toggleCustomAndGrocery() {
+        const customInput = document.getElementById('custom_item');
+        const radios = document.querySelectorAll('input[name="selected_item"]');
+        const anySelected = Array.from(radios).some(r => r.checked);
+
+        // Disable custom input if any grocery item is selected
+        customInput.disabled = anySelected;
+
+        // Disable grocery radio buttons if custom input is filled
+        const customTyped = customInput.value.trim().length > 0;
+        radios.forEach(radio => {
+        radio.disabled = customTyped;
+        });
+    }
+
+    document.addEventListener('DOMContentLoaded', () => {
+        document.getElementById('custom_item').addEventListener('input', toggleCustomAndGrocery);
+        document.querySelectorAll('input[name="selected_item"]').forEach(r => {
+        r.addEventListener('change', toggleCustomAndGrocery);
+        });
+    });
+
+    function toggleCustomEntry() {
+      const checkboxes = document.querySelectorAll('input[name="selected_items"]');
+      const customInput = document.getElementById('custom_item');
+      const disable = Array.from(checkboxes).some(cb => cb.checked);
+      customInput.disabled = disable;
+    }
+
+    function toggleGroceryCheckboxes() {
+      const customInput = document.getElementById('custom_item');
+      const checkboxes = document.querySelectorAll('input[name="selected_items"]');
+      if (customInput.value.trim().length > 0) {
+        checkboxes.forEach(cb => cb.disabled = true);
+      } else {
+        checkboxes.forEach(cb => cb.disabled = false);
+      }
+    }
+
+    document.addEventListener('DOMContentLoaded', () => {
+      document.querySelectorAll('input[name="selected_items"]').forEach(cb => {
+        cb.addEventListener('change', toggleCustomEntry);
+      });
+      document.getElementById('custom_item').addEventListener('input', toggleGroceryCheckboxes);
+    });
+
+    function resetUnitOnCustomInput() {
+      const customInput = document.getElementById('custom_item');
+      const unitSelect = document.querySelector('select[name="unit"]');
+
+      customInput.addEventListener('input', () => {
+        if (customInput.value.trim().length > 0) {
+          unitSelect.value = "";  // Reset to default "Select Unit"
+        }
+      });
+    }
+
+    // Call the function after DOM loads
+    document.addEventListener('DOMContentLoaded', () => {
+      resetUnitOnCustomInput();
+    });
+
+    const unitMap = {
+        "Milk": "ml",
+        "Cheese": "g",
+        "Yogurt": "ml",
+        "Bread": "pieces",
+        "Eggs": "pieces",
+        "Chicken": "kg",
+        "Tomatoes": "kg",
+        "Potatoes": "kg",
+        "Rice": "kg",
+        "Dal": "kg",
+        "Salt": "g",
+        "Sugar": "g",
+        "Oil": "litre"
+    };
+
+    function autoSelectUnit(itemName) {
+        const unitSelect = document.querySelector('select[name="unit"]');
+        if (unitMap[itemName]) {
+        unitSelect.value = unitMap[itemName];
+        } else {
+        unitSelect.value = "";
+        }
+    }
+
+    function bindRadioUnitSelection() {
+        const radios = document.querySelectorAll('input[name="selected_item"]');
+        radios.forEach(radio => {
+        radio.addEventListener('change', () => {
+            if (radio.checked) {
+            autoSelectUnit(radio.value);
+            }
+        });
+        });
+    }
+
+    document.addEventListener("DOMContentLoaded", () => {
+        bindRadioUnitSelection();
+    });
+
+    document.addEventListener("DOMContentLoaded", function () {
+      const today = new Date().toISOString().split("T")[0];  // format: yyyy-mm-dd
+      document.querySelector('input[name="mfg_date"]').setAttribute("max", today);
+    });
+
+    document.querySelector('input[name="mfg_date"]').addEventListener("change", function () {
+      const selected = new Date(this.value);
+      const today = new Date();
+      today.setHours(0, 0, 0, 0);
+
+      if (selected > today) {
+        alert("Manufacture date cannot be in the future.");
+        this.value = "";
+      }
+    });
+
+    document.addEventListener("DOMContentLoaded", function () {
+    const mfgInput = document.getElementById("mfg_date");
+    const expInput = document.getElementById("exp_date");
+
+    const today = new Date().toISOString().split("T")[0];
+    mfgInput.setAttribute("max", today);
+
+    mfgInput.addEventListener("change", function () {
+      if (mfgInput.value) {
+        expInput.disabled = false;
+        expInput.setAttribute("min", mfgInput.value);
+      } else {
+        expInput.disabled = true;
+        expInput.value = "";
+        expInput.removeAttribute("min");
+      }
+    });
+
+    expInput.addEventListener("change", function () {
+      if (expInput.value <= mfgInput.value) {
+        alert("Expiry date must be after the manufacture date.");
+        expInput.value = "";
+      }
+    });
+
+  });
+
+  document.addEventListener("DOMContentLoaded", function () {
+    const mfgInput = document.getElementById("mfg_date");
+    const expInput = document.getElementById("exp_date");
+
+    const today = new Date().toISOString().split("T")[0];
+    mfgInput.setAttribute("max", today);
+
+    mfgInput.addEventListener("change", function () {
+      if (mfgInput.value) {
+        expInput.disabled = false;
+        expInput.value = "";  // reset if user changes mfg date
+        expInput.setAttribute("min", mfgInput.value);
+      } else {
+        expInput.disabled = true;
+        expInput.value = "";
+        expInput.removeAttribute("min");
+      }
+    });
+
+    expInput.addEventListener("change", function () {
+      if (expInput.value <= mfgInput.value) {
+        alert("Expiry date must be after manufacture date.");
+        expInput.value = "";
+      }
+    });
+  });
+
+  </script>
+</head>
+<body>
+  <!-- Navbar -->
+  <nav class="navbar">
+    <div class="navbar-logo">
+      <a href="/" style="text-decoration: none; color: inherit;">🛒 Smart Food Tracker</a>
+    </div>
+    <ul class="navbar-menu">
+      <li><a class="active" href="/grocery">Grocery Entry</a></li>
+      <li><a href="/dashboard">Food Tracker</a></li>
+      <li><a href="/donate">Donation</a></li>
+      <li><a href="/impact">Impact Report</a></li>
+      <li><a href="/recipes">Recipe Ideas</a></li>
+    </ul>
+  </nav>
+
+  {% with messages = get_flashed_messages(with_categories=true) %}
+    {% if messages %}
+      <div class="flash-messages">
+        {% for category, message in messages %}
+          <div class="flash {{ category }}">{{ message }}</div>
+        {% endfor %}
+      </div>
+    {% endif %}
+  {% endwith %}
+
+  <!-- Form Section -->
+<div class="grocery-section">
+  <h2>Add Grocery Item</h2>
+  <form method="POST">
+
+    {% for group, items in {
+      'Dairy': ['Milk', 'Cheese', 'Yogurt'],
+      'Bakery': ['Bread'],
+      'Protein': ['Eggs', 'Chicken'],
+      'Vegetables': ['Tomatoes', 'Potatoes'],
+      'Grains & Pulses': ['Rice', 'Dal'],
+      'Pantry Essentials': ['Salt', 'Sugar', 'Oil']
+    }.items() %}
+    <div class="category-section">
+      <label><strong>{{ group }}</strong></label>
+      <div class="grocery-buttons">
+        {% for item in items %}
+        <label class="radio-btn">
+          <input type="radio" name="selected_item" value="{{ item }}" onclick="toggleRadio(this)">
+          <span>{{ item }}</span>
+        </label>
+        {% endfor %}
+      </div>
+    </div>
+    {% endfor %}
+
+    <!-- Custom Item Input -->
+    <div class="custom-item-box">
+      <label><strong>OR Add Custom Item</strong></label><br>
+      <input type="text" id="custom_item" name="custom_item" placeholder="Enter item name (if not selected above)">
+    </div>
+
+    <!-- Quantity + Unit Section -->
+    <div class="quantity-section">
+      <label><strong>Quantity & Unit</strong></label>
+      <div class="quantity-unit-box">
+        <input type="text" list="qtylist" name="quantity" placeholder="Enter or select" required oninput="this.value = this.value.replace(/[^0-9]/g, '')">
+        <datalist id="qtylist">
+          {% for i in range(1, 11) %}
+          <option value="{{ i }}">
+          {% endfor %}
+        </datalist>
+
+        <select name="unit" required>
+          <option value="">Select Unit</option>
+          <option value="pieces">Pieces</option>
+          <option value="dozen">Dozen</option>
+          <option value="kg">Kg</option>
+          <option value="g">Grams</option>
+          <option value="litre">Litre</option>
+          <option value="ml">ml</option>
+        </select>
+      </div>
+    </div>
+
+    <!-- Date Selection -->
+    <label><strong>Manufacture Date & Expiry Date</strong></label>
+    <div class="form-row">
+      <input type="date" name="mfg_date" id="mfg_date" required>
+      <input type="date" name="exp_date" id="exp_date" required>
+    </div>
+
+    <button type="submit" class="btn-green full-width">+ Add Item</button>
+
+  </form>
+</div>
+
+  <!-- Footer -->
+  <footer class="footer">
+    <p>&copy; 2025 Smart Food Tracker. Built with love to reduce waste. 🌍</p>
+    <p><a href="mailto:support@smartfoodtracker.com">Contact Support</a></p>
+  </footer>
+
+  
+
+</body>
+</html>

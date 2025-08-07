@@ -1,0 +1,78 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Smart Food Tracker</title>
+    <link rel="stylesheet" href="{{ url_for('static', filename='css/style.css') }}">
+    <link rel="preconnect" href="https://fonts.googleapis.com">
+    <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+    <link href="https://fonts.googleapis.com/css2?family=Inter:wght@400;600;700&display=swap" rel="stylesheet">
+</head>
+<body>
+    <!-- Navbar -->
+    <nav class="navbar">
+        <div class="navbar-logo">
+            <a href="/" style="text-decoration: none; color: inherit;">🛒 Smart Food Tracker</a>
+        </div>
+
+        <ul class="navbar-menu">
+            <li><a href="/grocery">Grocery Entry</a></li>
+            <li><a href="/dashboard">Food Tracker</a></li>
+            <li><a href="/donate">Donation</a></li>
+            <li><a href="/impact">Impact Report</a></li>
+            <li><a href="/recipes">Recipe Ideas</a></li>
+        </ul>
+    </nav>
+
+    <!-- Hero Section -->
+    <section class="hero">
+        <div class="hero-content">
+            <h1>Reduce Food Waste,<br>Save Money & Help Others</h1>
+            <p>Smart Food Tracker helps you manage groceries efficiently, reduce waste,<br>and connect with local food banks to share surplus food.</p>
+            <div class="hero-buttons">
+                <a href="/grocery" class="btn-green">🛒 Start Tracking</a>
+                <a href="/impact" class="btn-outline">🔗 View Impact</a>
+            </div>
+        </div>
+    </section>
+
+    <!-- Features Section -->
+    <section class="features-grid">
+        <div class="feature-card">
+            <div class="icon">🛒</div>
+            <div>
+                <h3>Smart Grocery Entry</h3>
+                <p>Quick and intuitive grocery tracking with automatic shelf-life categorization</p>
+            </div>
+        </div>
+        <div class="feature-card">
+            <div class="icon">📅</div>
+            <div>
+                <h3>Expiry Tracking</h3>
+                <p>Visual timeline to monitor food freshness and get timely reminders</p>
+            </div>
+        </div>
+        <div class="feature-card">
+            <div class="icon">💚</div>
+            <div>
+                <h3>Food Donation</h3>
+                <p>Connect with local food banks to share surplus food with those in need</p>
+            </div>
+        </div>
+        <div class="feature-card">
+            <div class="icon">🌿</div>
+            <div>
+                <h3>Environmental Impact</h3>
+                <p>Track your contribution to reducing food waste and environmental footprint</p>
+            </div>
+        </div>
+    </section>
+
+    <!-- Footer -->
+    <footer class="footer">
+        <p>&copy; 2025 Smart Food Tracker. Built with love to reduce waste. 🌍</p>
+        <p><a href="mailto:support@smartfoodtracker.com">Contact Support</a></p>
+    </footer>
+</body>
+</html>

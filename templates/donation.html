@@ -1,0 +1,104 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8">
+  <title>Donate Leftover Food</title>
+  <link rel="stylesheet" href="{{ url_for('static', filename='css/style.css') }}">
+</head>
+<body>
+
+  <!-- Navbar -->
+  <nav class="navbar">
+    <div class="navbar-logo">
+      <a href="/" style="text-decoration: none; color: inherit;">🛒 Smart Food Tracker</a>
+    </div>
+    <ul class="navbar-menu">
+      <li><a href="/grocery">Grocery Entry</a></li>
+      <li><a href="/dashboard">Food Tracker</a></li>
+      <li><a class="active" href="/donate">Donation</a></li>
+      <li><a href="/impact">Impact Report</a></li>
+      <li><a href="/recipes">Recipe Ideas</a></li>
+    </ul>
+  </nav>
+
+  <div class="donation-page">
+    <h2>Donate Leftover Food</h2>
+    <p>Select items to donate and find nearby food banks.</p>
+
+    <form method="POST">
+    <div class="donation-box">
+      <div class="donation-container">
+        
+        <!-- LEFT: Grocery Items -->
+        <div class="donation-left">
+          <h4>Select Items to Donate</h4>
+          {% for item in groceries %}
+          <div class="donation-item">
+            <input type="checkbox" name="items" value="{{ item._id }}" id="item-{{ loop.index }}">
+            <label for="item-{{ loop.index }}">
+              <strong>{{ item.item }}</strong><br>
+              {{ item.quantity }} {{ item.unit }} • {{ item.status }}<br>
+              Expires: {{ item.expiry_date.strftime("%b %d, %Y") }}
+            </label>
+          </div>
+          {% endfor %}
+        </div>
+    
+        <!-- RIGHT: Food Bank Options -->
+        <div class="donation-right">
+          <h4>Nearby Food Banks</h4>
+          {% for bank in food_banks %}
+          <div class="foodbank-box">
+            <input type="radio" name="foodbank" value="{{ bank.name }}" id="bank-{{ loop.index }}">
+            <label for="bank-{{ loop.index }}">
+              <strong>{{ bank.name }}</strong><br>
+              📍 {{ bank.address }}<br>
+              ☎️ {{ bank.phone }}<br>
+              ⏰ {{ bank.hours }}<br>
+              <span class="distance">{{ bank.distance }}</span>
+            </label>
+          </div>
+          {% endfor %}
+        </div>
+      </div>
+    </div>
+
+      <!-- Submit Button -->
+      <div class="donation-footer">
+        <button type="submit" class="donate-btn" id="donateButton" disabled>🤍 Share with Food Bank →</button>
+      </div>
+    </form>
+  </div>
+
+  <script>
+    const checkboxes = document.querySelectorAll('input[name="items"]');
+    const radios = document.querySelectorAll('input[name="foodbank"]');
+    const button = document.getElementById('donateButton');
+
+    function toggleDonateButton() {
+      const itemSelected = [...checkboxes].some(c => c.checked);
+      const bankSelected = [...radios].some(r => r.checked);
+      button.disabled = !(itemSelected && bankSelected);
+    }
+
+    checkboxes.forEach(c => c.addEventListener('change', toggleDonateButton));
+    radios.forEach(r => r.addEventListener('change', toggleDonateButton));
+  </script>
+
+  <!-- Footer -->
+  <footer class="footer">
+    <p>Smart Food Tracker © 2025 • Reduce Waste • Save Money • Help Others</p>
+  </footer>
+
+  {% if success %}
+  <div id="toast" class="toast-popup top-toast">🎉 Donation shared successfully!</div>
+  <script>
+    setTimeout(() => {
+      document.getElementById("toast").style.display = "none";
+    }, 4000);
+  </script>
+  {% endif %}
+
+
+</body>
+</html>
