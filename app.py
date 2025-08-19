@@ -17,7 +17,7 @@ model = genai.GenerativeModel("models/gemini-2.0-flash")
 app = Flask(__name__)
 app.secret_key = 'supersecretkey'
 
-client = MongoClient("mongodb://localhost:27017/")
+client = MongoClient(os.getenv("MONGO_URI"))
 db = client["foodloop"]
 groceries_collection = db["groceries"]
 used_collection = db["used_items"]
